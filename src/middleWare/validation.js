@@ -33,5 +33,20 @@ export const generalValidation = {
     phone:Joi.string(),
     role:Joi.string().valid(Roles.Admin , Roles.User),
     id:Joi.custom(idValidation),
-    code:Joi.string().length(6)
+    title:Joi.string(),
+    body:Joi.string(),
+    code:Joi.string().length(6),
+}
+
+
+export const graphValid = (args , schema)=>{
+      
+        const result = schema.validate(args);
+        let errors = [];
+        if(result.error){
+            errors.push(result.error.details[0].message)
+            return errors
+        }
+        return;
+
 }

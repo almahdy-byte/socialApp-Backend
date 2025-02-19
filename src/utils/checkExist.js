@@ -1,0 +1,1 @@
+export const isExist = (data)=>data ? true : false;

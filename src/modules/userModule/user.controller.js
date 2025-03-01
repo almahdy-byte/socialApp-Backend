@@ -1,9 +1,11 @@
 import { StatusCodes } from "http-status-codes";
-import { findOneAndUpdate , findById, findByIdAndUpdate} from "../../DB/dbService.js";
+import { findOneAndUpdate , findById, findByIdAndUpdate, findOne} from "../../DB/dbService.js";
 import userModel from "../../DB/models/user.model.js";
 import fs from 'fs'
 import path from "path";
 import cloudinary from "../../utils/multer/cloudinary.js";
+import { areFriends } from "./helpers/checkFriends.js";
+import { checkFriendRequest } from "./helpers/checkFriendRequest.js";
 
 export const shareProfile=async(req , res , next)=>{
     const {profileId} = req.params;
@@ -44,19 +46,18 @@ export const uploadPicture = async(req , res , next)=>{
 
 
 export const setProfilePicture= async(req , res , next)=>{
-    
     const file = req.file
     
     const user = req.user
-    
     const {public_id , secure_url} =await cloudinary.uploader.upload(file.path , {
         folder:`users/${user._id}`
     })
+    
     user.profilePicture={
         public_id , secure_url
-    }
+    }    
     await user.save()
-    return res.json({message:'done11' , user})
+    return res.json({message:'done' , user})
 }
 
 export const deleteProfilePicture = async(req , res , next)=>{
@@ -77,4 +78,50 @@ export const deleteProfilePicture = async(req , res , next)=>{
     user_.save();
 
     return res.status(StatusCodes.ACCEPTED).json({ user_})
+}
+
+
+export const getFriedRequests = async(req , res , next)=>{
+const user = req.user;
+const friend = await findOne({
+    model:userModel,
+    filter:{_id:req.params.friendId}
+})
+
+if(!friend) return next(new Error('user not found' , {cause:StatusCodes.NOT_FOUND}))
+if(user._id.toString() === friend._id.toString()) return next(new Error('can not send request to your self', {cause:StatusCodes.FORBIDDEN}))
+if(areFriends({user , friend})) return next(new Error('already friends' , {cause:StatusCodes.BAD_REQUEST}));
+if(checkFriendRequest({user , friend})) return next(new Error('request already sent' , {cause:StatusCodes.BAD_REQUEST}));
+friend.friendRequests.push(user._id);
+await friend.save(); 
+return res.status(StatusCodes.ACCEPTED).json({message:'done' , friendRequests : friend.friendRequests})
+}
+
+export const acceptFriendRequest = async(req , res , next)=>{
+    const user = req.user; // receiver me
+    const friend = await findOne({
+        model:userModel,
+        filter:{_id:req.params.friendId}
+    })
+    if(!friend) return next(new Error('user not found' , {cause:StatusCodes.NOT_FOUND}))
+        console.log({friend , user});
+        
+    if(areFriends({user , friend})) return next(new Error('already friends' , {cause:StatusCodes.BAD_REQUEST}));
+    if(!checkFriendRequest({user , friend})) return next(new Error('not found friend request' , {cause:StatusCodes.BAD_REQUEST}));
+    user.friendRequests = user.friendRequests.filter(id => id.toString() !== friend._id.toString());    
+    user.friends.push(friend._id);
+    friend.friends.push(user._id);  
+    await Promise.all([user.save() , friend.save()])
+    return res.status(StatusCodes.ACCEPTED).json({message:'done' , friendRequests : user.friends})
+    }
+
+export const getFriends = async(req , res , next)=>{
+    const user = req.user;
+    await user.populate([{
+            path:'friends',
+            select:'userName email _id profilePicture.secure_url'
+        }
+    ])
+    
+    res.status(StatusCodes.ACCEPTED).json({friends:user.friends})
 }

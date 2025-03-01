@@ -13,39 +13,39 @@ router.route('/')
         return res.json({message:req.params})
     })
     .post(
-            asyncErrorHandler(auth) ,
+            auth() ,
             uploadFile(fileType.image).single('image'),
             asyncErrorHandler(commentServices.createComment)
     )
 router.patch('/:commentId' ,
-    asyncErrorHandler(auth),
+    auth(),
     uploadFile(fileType.image).single('image'),
     asyncErrorHandler(commentServices.updateComment)
     )
 router.patch('/soft-delete/:commentId' ,
-        asyncErrorHandler(auth),
+        auth(),
         asyncErrorHandler(commentServices.softDelete)
     )
 router.patch('/like-unlike/:commentId' ,
-        asyncErrorHandler(auth),
+        auth(),
         asyncErrorHandler(commentServices.like_unlike)
     )
     router.post('/add-replay/:commentId' , 
-        asyncErrorHandler(auth),
+        auth(),
         uploadFile(fileType.image).single('image'),
         asyncErrorHandler(commentServices.addReplay)
     
     )
     router.get('/get-replays/:commentId' , 
-        asyncErrorHandler(auth),
+        auth(),
         asyncErrorHandler(commentServices.getReplay)
     )
     router.get('/get-replays/' , 
-        asyncErrorHandler(auth),
+        auth(),
         asyncErrorHandler(commentServices.getReplay)
     )
     router.delete('/hard-delete/:commentId' ,
-        asyncErrorHandler(auth),
+        auth(),
         asyncErrorHandler(commentServices.hardDelete)
     )
 

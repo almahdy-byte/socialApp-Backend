@@ -66,7 +66,17 @@ const userSchema = new Schema({
     profilePicture:{
         public_id:String,
         secure_url:String
-    }
+    },
+    friendRequests:[
+        {
+                type:Types.ObjectId,
+                ref :'User'
+        }
+    ],
+    friends:[{
+                type:Types.ObjectId,
+                ref :'User'
+    }]
 }   ,{ toJSON: { virtuals: true },
 toObject: { virtuals: true }}
 );

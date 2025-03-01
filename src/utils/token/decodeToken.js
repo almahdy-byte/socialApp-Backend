@@ -13,12 +13,13 @@ export const decodeToken = async ({ authorization, type = tokenTypes.access, nex
 
     const parts = authorization.split(" ");
     if (parts.length !== 2) return next(new Error('Invalid token format'));
-
+    
+    
     const [barer, token] = parts;
     if (!barer || !token) return next(new Error('please send token'));
-
+    
     let accessSignature, refreshSignature;
-
+    
     switch (barer) {
         case Roles.Admin:
             accessSignature = process.env.ADMIN_ACCESS_TOKEN;
@@ -38,12 +39,9 @@ export const decodeToken = async ({ authorization, type = tokenTypes.access, nex
 
     try {
         const decoded = await verify(token, sign);
-
-        const user = await findOne({
-            model: userModel,
-            filter: { _id: decoded.id, isConfirmed: true }
-        });
-
+        
+        const user = await userModel.findOne({_id : decoded.id, isConfirmed: true});
+        
         if (!user) return next(new Error('Invalid token'));
 
         return { user, accessSignature };

@@ -9,6 +9,7 @@ import adminRouter from './modules/adminModule/admin.router.js'
 import { StatusCodes } from 'http-status-codes';
 import {schema} from './graphQl.js'
 import { createHandler } from 'graphql-http/lib/use/express';
+import chatRouter from './modules/chatModule/chat.router.js';
 export const bootstrap = async (app , express) => {
 app.use(express.json());
 // app.use(cors({
@@ -19,7 +20,7 @@ app.use(express.json());
 //         return callBack(null , true)
 //     }
 // }));
-app.use(cors());
+app.use(cors('*'));
 await connectToDB()
 
 app.use('/auth' , authRouter);
@@ -27,6 +28,7 @@ app.use('/user' , userRouter);
 app.use('/post' , postRouter);
 app.use('/admin' , adminRouter);
 app.use('/uploads' , express.static('uploads'));
+app.use('/chat' , chatRouter)
 app.use('/graphQl' , createHandler({schema}))
 app.all('*' , (req , res ,next)=>{
     return res.status(StatusCodes.NOT_FOUND).json({message:'page not found'})

@@ -12,12 +12,12 @@ router.get('/',(req ,res ,next)=>{
 })
 
 router.get('/users-posts' , 
-    asyncErrorHandler(auth) , 
+    auth() , 
     allowTo([Roles.Admin , Roles.User]),
     asyncErrorHandler(adminServices.getUsersPosts)
 )
 router.patch('/change-role/:id' , 
-    asyncErrorHandler(auth) , 
+    auth() , 
     allowTo([Roles.Admin  , Roles.superAdmin]),
     asyncErrorHandler(adminServices.changeRole)
 )

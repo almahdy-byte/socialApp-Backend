@@ -1,4 +1,4 @@
 import jwt from 'jsonwebtoken';
-export const verify = (token , signature) => {
-    return jwt.verify(token, signature);
+export const verify = async(token , signature) => {
+    return await jwt.verify(token, signature);
 }

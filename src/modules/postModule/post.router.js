@@ -10,24 +10,24 @@ router.use('/:postId/comment' , commentRouter)
 router.route('/')
     .get((req , res , next)=>{return res.json({message:"hello post router"})})
     .post(
-        asyncErrorHandler(auth),
+        auth(),
         asyncErrorHandler(postServices.createPost)
     )
 router.patch('/:postId' ,
-    asyncErrorHandler(auth),
+    auth(),
     asyncErrorHandler(postServices.updatePost)
 )
 
 router.delete('/:postId' ,
-    asyncErrorHandler(auth),
+    auth(),
     asyncErrorHandler(postServices.deletePost)
 )
 router.delete('/soft-delete/:postId' ,
-    asyncErrorHandler(auth),
+    auth(),
     asyncErrorHandler(postServices.softDelete)
 )
 router.get('/get-all-post' , asyncErrorHandler(postServices.getPost))
 router.get('/get-post/:postId' , asyncErrorHandler(postServices.getPost))
-router.patch('/like-unlike/:postId' , asyncErrorHandler(auth),asyncErrorHandler(postServices.like_unlike))
+router.patch('/like-unlike/:postId' , auth(),asyncErrorHandler(postServices.like_unlike))
 
 export default router;

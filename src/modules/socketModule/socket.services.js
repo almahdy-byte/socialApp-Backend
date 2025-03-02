@@ -7,8 +7,7 @@ import { areFriends } from "../userModule/helpers/checkFriends.js";
     export const sendMessage =async(socket)=>{
         return socket.on('private_message' ,async (data)=>{
             const {to , message} = data;
-            console.log({to , message});
-            
+
             const user = socket.user;
             const friend =await userModel.findOne({_id:to});
             if(!areFriends({user , friend})) throw new Error('you can not send message to this user');

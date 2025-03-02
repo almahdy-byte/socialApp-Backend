@@ -104,7 +104,6 @@ export const acceptFriendRequest = async(req , res , next)=>{
         filter:{_id:req.params.friendId}
     })
     if(!friend) return next(new Error('user not found' , {cause:StatusCodes.NOT_FOUND}))
-        console.log({friend , user});
         
     if(areFriends({user , friend})) return next(new Error('already friends' , {cause:StatusCodes.BAD_REQUEST}));
     if(!checkFriendRequest({user , friend})) return next(new Error('not found friend request' , {cause:StatusCodes.BAD_REQUEST}));

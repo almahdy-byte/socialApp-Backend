@@ -29,7 +29,6 @@ async function main() {
     html,
   });
 
-  console.log("Message sent: %s", info.messageId);
 }
 
 main().catch(console.error);

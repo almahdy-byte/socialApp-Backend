@@ -24,6 +24,5 @@ export const getChat = async(req , res , next)=>{
             messages:[]
         })
     }
-    console.log({chat});
     return res.status(StatusCodes.ACCEPTED).json({chat , messages:chat.messages} );
 }

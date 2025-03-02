@@ -22,7 +22,7 @@ app.use(express.json());
 // }));
 app.use(cors('*'));
 await connectToDB()
-app.use('/' , (req , res , next)=>{
+app.get('/' , (req , res , next)=>{
     return res.status(StatusCodes.OK).json({message:'main social app route'})
 })
 

@@ -24,7 +24,7 @@ app.use(cors('*'));
 await connectToDB()
 app.use('/' , (req , res , next)=>{
     return res.status(StatusCodes.OK).json({message:'main social app route'})
-};
+})
 
 app.use('/auth' , authRouter);
 app.use('/user' , userRouter);

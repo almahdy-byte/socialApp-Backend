@@ -67,7 +67,7 @@ export const login = async(req , res , next)=>{
     if(!user) return next(new Error('invalid email or password ' , {cause:StatusCodes.BAD_REQUEST}));
     if(!compare(password , user.password)) return next(new Error('invalid email or password ' , {cause:StatusCodes.BAD_REQUEST}));
     const [accessToken , refreshToken] =await createToken(user.role , {id:user._id});
-    return res.status(StatusCodes.ACCEPTED).json({message:'done' , accessToken , refreshToken});
+    return res.status(StatusCodes.ACCEPTED).json({message:'done' , accessToken , refreshToken , profilePicture:user.profilePicture.secure_url, userName:user.userName, role:user.role});
     
 }
 

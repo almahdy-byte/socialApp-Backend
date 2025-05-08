@@ -1,6 +1,6 @@
 import {Server } from "socket.io";
 import { decodeToken } from "./socket.auth.js";
-import { sendMessage } from "./socket.services.js";
+import {  sendMessage } from "./socket.services.js";
 
 export const serverConnection = (server)=>{
     const io = new Server(server , {
@@ -18,6 +18,7 @@ export const serverConnection = (server)=>{
     io.on("connection", (socket)=>{ 
         console.log("New client connected");
         sendMessage(socket);
+
         socket.on("disconnect", ()=>{console.log("Client disconnected")});
     });
 }

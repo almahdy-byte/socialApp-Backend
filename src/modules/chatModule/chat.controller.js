@@ -5,6 +5,7 @@ import { findOne } from "../../DB/dbService.js";
 import { AIChatModel } from "../../DB/models/AIChat.model.js";
 import { AI } from "../../utils/AIChating/AIChat.js";
 import { asyncErrorHandler } from "../../utils/errorHandler/asyncErrorHandler.js";
+import { huffmanDecode , huffmanEncode} from "../../utils/comperession/compression.js";
 
 
 export const getChat = async(req , res , next)=>{
@@ -53,29 +54,40 @@ export const getChatWithAI = async(req, res, next)=>{
 }
 
 export const chatWithAI= asyncErrorHandler(async(req , res , next) =>{
-const message = req.body.message;
-const user = req.user;
-const AIMessage = await AI(message);
-console.log({AIMessage});
+    const {body , tree} = req.body;
+    const user = req.user;
+    const deCompressedMessage = huffmanDecode(body , tree);
+    const deCompressedAIMessage = await AI(deCompressedMessage);
+
+    const compressedAIMessage = huffmanEncode(deCompressedAIMessage);
 
     const AIChat = await AIChatModel.findOneAndUpdate(
-        {
-            user: user._id
-        },
-        {
-            $push: {
-                messages: {
-                    message,
-                    AIMessage
-                    }
+            {
+                user: user._id
+            },
+            {
+                $push: {
+                    messages: {
+                        message:{
+                            body,
+                            tree
+                        },
+                        AIMessage:{
+                            body:compressedAIMessage.encodedText,
+                            tree:compressedAIMessage.tree
+                        }
+                        }
+                }
+            },
+            {
+                new:true,
+                upsert:true
             }
-        },
-        {
-            new:true,
-            upsert:true
-        }
-    )
+        )
 
-    return res.status(StatusCodes.ACCEPTED).json({AIChat , AIMessage});
+        return res.status(StatusCodes.ACCEPTED).json({AIChat , AIMessage : {
+            body:compressedAIMessage.encodedText,
+            tree:compressedAIMessage.tree
+        }});
 
 })

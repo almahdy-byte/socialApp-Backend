@@ -9,12 +9,24 @@ const AIChatSchema = new Schema({
 
     messages: [{
         message:{
-            type: String,
-            required: true
+            body:{
+                type: String,
+                required: true
+            },
+            tree:{
+                type: Object,
+                required: true
+            }
         },
         AIMessage:{
-            type: String,
-            required: true
+            body:{
+                type: String,
+                required: true
+            },
+            tree:{
+                type: Object,
+                required: true
+            }
         }
     }]
 })

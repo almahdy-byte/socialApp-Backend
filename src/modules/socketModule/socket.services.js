@@ -12,7 +12,6 @@ export const sendMessage =async(socket)=>{
     let {to , message} = data;
 
     const user = socket.user;
-    console.log(1);
     
 
     const friend =await userModel.findOne({_id:to});
@@ -29,7 +28,8 @@ export const sendMessage =async(socket)=>{
         },{
         $push:{
             messages:{
-                body : message,
+                body : message.encodedText,
+                tree : message.tree,
                 senderId : user._id,
                 }
         }
@@ -44,7 +44,8 @@ export const sendMessage =async(socket)=>{
                 secure_url:user.profilePicture.secure_url},
                 userName:user.userName
             } , 
-                body:message
+                body:message.encodedText,
+                tree:message.tree
             })
         })
         

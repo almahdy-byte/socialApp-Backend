@@ -1,21 +1,94 @@
-// Helper Functions for Compression
-const compressText = (text) => {
-    const compressed = pako.gzip(text);
-    return btoa(String.fromCharCode(...compressed)); 
-};
 
-const dCompressText = (base64Str) => {
-    const binaryString = atob(base64Str);
-    const byteArray = new Uint8Array([...binaryString].map(char => char.charCodeAt(0)));
-    return pako.inflate(byteArray, { to: 'string' });
-};
 
-const messageCompression = (text) => {
-    const compressed = compressText(text);
-    return compressed;
-};
+const encrypt = (text) => {
+    const encodedText =  CryptoJS.AES.encrypt(text, 'encrypt-message-secret-key').toString();
+    console.log(encodedText);
+    return encodedText;
+    
+}
 
-const messageDCompression = (compressedText) => dCompressText(compressedText);
+const decrypt = (text) => {
+    return CryptoJS.AES.decrypt(text,'encrypt-message-secret-key').toString(CryptoJS.enc.Utf8);
+}
+class Node {
+    constructor(char, freq, left = null, right = null) {
+      this.char = char;
+      this.freq = freq;
+      this.left = left;
+      this.right = right;
+    }
+  }
+  
+  // بناء شجرة هوفمان
+  function buildHuffmanTree(text) {
+    const freqMap = new Map();
+  
+    // 1. حساب التكرار
+    for (let char of text) {
+      freqMap.set(char, (freqMap.get(char) || 0) + 1);
+    }
+  
+    // 2. تحويل التكرارات إلى نودات
+    let nodes = Array.from(freqMap, ([char, freq]) => new Node(char, freq));
+  
+    // 3. بناء الشجرة
+    while (nodes.length > 1) {
+      // ترتيب النودات حسب التكرار
+      nodes.sort((a, b) => a.freq - b.freq);
+  
+      // دمج أقل عنصرين
+      const left = nodes.shift();
+      const right = nodes.shift();
+  
+      const merged = new Node(null, left.freq + right.freq, left, right);
+      nodes.push(merged);
+    }
+  
+    return nodes[0]; // root node
+  }
+  
+  // بناء كودات هوفمان
+  function buildCodes(node, path = "", map = {}) {
+    if (!node.left && !node.right) {
+      map[node.char] = path;
+    }
+    if (node.left) buildCodes(node.left, path + "0", map);
+    if (node.right) buildCodes(node.right, path + "1", map);
+    return map;
+  }
+  
+  // encode huffman
+function huffmanEncode(text) {
+    const tree = buildHuffmanTree(text);
+    const codes = buildCodes(tree);
+  
+    let encoded = "";
+    for (let char of text) {
+      encoded += codes[char];
+    }
+  
+    return { encodedText: encoded, tree };
+  }
+  
+  // دالة فك الضغط
+  function huffmanDecode(encodedText, tree) {
+    let result = "";
+    let node = tree;
+  
+    for (let bit of encodedText) {
+      node = bit === "0" ? node.left : node.right;
+  
+      if (!node.left && !node.right) {
+        result += node.char;
+        node = tree; // reset to root
+      }
+    }
+  
+    return result;
+  }
+  
+
+
 
 let selectedUserId = null;
 let profileImg = localStorage.getItem('profileImage');
@@ -139,13 +212,16 @@ function displayMessages(messages) {
 
 // Add message to chat box
 function addMessage(msg, type) {
+
+    
     const messagesBox = document.getElementById("messages");
     const div = document.createElement("div");
     div.className = `message ${type}`;
+    
 
     const imgSrc = msg.senderId?.profilePicture?.secure_url || profileImg || "default.png";
-    const senderName = type === "received" ? (msg.senderId?.userName || "AI") : "Me";
-    const body = msg.body ? messageDCompression(msg.body) : (msg.message || msg.AIMessage);
+    const senderName = type === "received" ? (msg.senderId?.userName) : "Me";
+    const body = decrypt(huffmanDecode(msg.body ,msg.tree)) 
 
     div.innerHTML = `
         <img src="${imgSrc}" alt="User Image">
@@ -166,8 +242,8 @@ function addAIMessage(msg, type) {
     div.className = `message ${type}`;
 
     const imgSrc = msg.senderId?.profilePicture?.secure_url || profileImg || "default.png";
-    const senderName = type === "received" ? (msg.senderId?.userName || "AI") : "Me";
-    const body = msg.body ? messageDCompression(msg.body) : (msg);
+    const senderName = type === "received" ? "AI" : "Me";
+    const body =  huffmanDecode(msg.body , msg.tree)
 
     div.innerHTML = `
         <img src="${imgSrc}" alt="User Image">
@@ -188,9 +264,22 @@ async function sendMessage() {
     if (!message || !selectedUserId) return;
 
     const profileImgNow = localStorage.getItem('profileImage') || 'default.png';
-    const compressedMessage = messageCompression(message);
-
+    
     if (selectedUserId === "ai-chat") {
+        
+        
+        const compressedMessage = huffmanEncode(message);
+
+        addAIMessage({
+            body: compressedMessage.encodedText,
+            tree: compressedMessage.tree,
+            senderId: {
+                userName: "Me",
+                profilePicture: { secure_url: profileImgNow }
+            }
+        }, "sent");
+
+
         try {
             const response = await fetch("http://localhost:3000/chat/ai", {
                 method: "POST",
@@ -198,36 +287,33 @@ async function sendMessage() {
                     "Content-Type": "application/json",
                     authorization: `user ${localStorage.getItem('token')}`
                 },
-                body: JSON.stringify({ message })
+                body: JSON.stringify({body :compressedMessage.encodedText , tree : compressedMessage.tree}),
             });
 
             const res = await response.json();
-            const aiResponse = res.AIMessage;
 
-            addMessage({
-                message,
-                senderId: {
-                    userName: "Me",
-                    profilePicture: { secure_url: profileImgNow }
-                }
-            }, "sent");
+            const {AIMessage} = res;
 
-            addMessage({
-                AIMessage: aiResponse,
+            addAIMessage({
+                ...AIMessage,
                 senderId: {
                     userName: "AI",
-                    profilePicture: { secure_url: "ai_icon.png" }
+                    profilePicture: { secure_url: profileImgNow }
                 }
             }, "received");
 
         } catch (error) {
             console.error("Failed to send message to AI:", error);
         }
-    } else {
+    } 
+    else {
+        
+        const compressedMessage = huffmanEncode(encrypt(message));
         socket.emit("private_message", { to: selectedUserId, message: compressedMessage });
-
+        
         addMessage({
-            body: compressedMessage,
+            body: compressedMessage.encodedText,
+            tree: compressedMessage.tree,
             senderId: {
                 userName: "Me",
                 profilePicture: { secure_url: profileImgNow }
@@ -240,6 +326,7 @@ async function sendMessage() {
 
 // Receive messages
 socket.on("private_message", (msg) => {
+    
     addMessage(msg, "received");
 });
 

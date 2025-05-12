@@ -11,6 +11,10 @@ const chatSchema = new Schema({
             type: Types.ObjectId,
             ref: 'User',
             required: true
+        },
+        tree:{
+            type: Object,
+            required: true
         }
     }]
 })

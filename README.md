@@ -85,6 +85,38 @@ cd social-media-backend
 npm install
 
 # 3. Create a .env file based on .env.example
+# Server
+PORT=3000
+
+# Database
+DB_URI=mongodb://localhost:27017/socialApp
+
+# Security
+SECRET_KEY=BAL7
+SALT=8
+
+# JWT Tokens
+USER_ACCESS_TOKEN=your_user_access_token
+USER_REFRESH_TOKEN=your_user_refresh_token
+ADMIN_ACCESS_TOKEN=your_admin_access_token
+ADMIN_REFRESH_TOKEN=your_admin_refresh_token
+
+# Google OAuth
+CLIENT_ID=your_google_client_id
+
+# Cloudinary
+CLOUD_NAME=your_cloudinary_name
+API_KEY=your_cloudinary_api_key
+API_SECRET=your_cloudinary_api_secret
+
+#email's sender
+EMAIL = your_email
+PASSWORD= your_password
+
+# AI (Optional)
+GEMINI_AI_KEY=your_gemini_api_key
+
+
 
 # 4. Start the development server
 npm run dev

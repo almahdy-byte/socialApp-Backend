@@ -1,83 +1,82 @@
-📱 Social Media App - Backend (Node.js & Express)
-This is the backend service for a Social Media Application that enables users to register, connect, share media, and chat in real-time. The app uses RESTful and GraphQL APIs, supports media uploads, and ensures secure authentication and communication.
+# 📱 Social Media App - Backend (Node.js & Express)
 
-🛠️ Technologies Used
-Node.js
+This is the backend service for a **Social Media Application** that allows users to register, connect, share media content, and chat in real-time. The application offers a mix of **RESTful** and **GraphQL** APIs, supports media uploads, and implements strong authentication and real-time communication.
 
-Express.js
+---
 
-MongoDB + Mongoose
+## 🛠️ Technologies Used
 
-GraphQL
+- **Node.js**
+- **Express.js**
+- **MongoDB** + **Mongoose**
+- **GraphQL**
+- **Socket.io**
+- **Cloudinary** + **Multer** (Media Uploads)
+- **Bcrypt** & **Crypto** (Password Security)
+- **Nodemailer** (Email Support)
+- **JWT** (Authentication)
+- **Google OAuth** (Social Login)
+- **Pagination**
+- **Helmet**, **CORS**, **Rate Limiter** (Security Enhancements)
 
-Socket.io
+---
 
-Cloudinary + Multer (File Uploads)
+## 🌟 Features
 
-Bcrypt & Crypto (Password Security)
+### 👤 Users
+- Register and login using email/password or Google account
+- View and edit profile information
+- Upload profile pictures and other media
+- Follow/unfollow users
+- Explore posts from followed users
 
-Nodemailer (Emailing)
+### 📝 Posts & Media
+- Create, update, and delete posts
+- Upload media (images/videos) using **Multer** and store them in **Cloudinary**
+- Like, comment, and engage with posts
 
-JWT (Authentication)
+### 💬 Messaging
+- Real-time 1-on-1 messaging via **Socket.io**
+- Includes typing indicators and instant message delivery
+- Conversation history and notifications support
 
-Google OAuth (Social Login)
+---
 
-Pagination
+## 🔐 Security & Authentication
 
-Helmet, CORS, Rate Limiter (Security Enhancements)
+- Passwords are hashed using **Bcrypt**
+- Authentication via **JWT** tokens
+- Optional login via **Google OAuth**
+- API protected using **Helmet**, **CORS**, and **Rate Limiter**
 
-🌟 Features
-👤 Users
-Register and login with email/password or Google
+---
 
-View and edit their profile and media
+## 📤 File & Media Uploads
 
-Follow/unfollow other users
+- Handled with **Multer**
+- Stored and served securely using **Cloudinary**
 
-View posts and interact with others
+---
 
-📝 Posts & Media
-Create, edit, and delete posts
+## 🚀 API Access
 
-Upload images and media using Multer & Cloudinary
+- Clean and modular **RESTful API**
+- Optional **GraphQL** API for flexible and efficient data queries
+- Pagination implemented on feeds, users, and comments
 
-Like and comment on posts
+---
 
-💬 Messaging
-Real-time 1:1 chat system using Socket.io
+## 📬 Realtime Chat
 
-Instant messaging with typing indicators and notifications
+- Built using **Socket.io**
+- Real-time private messaging with instant delivery
+- Includes **typing indicators** and message notifications
 
-🔐 Security & Authentication
-Passwords are securely hashed using Bcrypt
+---
 
-JWT for token-based session handling
+## 🧪 Setup & Run
 
-Google OAuth for seamless third-party login
-
-API protected using Helmet, CORS, and Rate Limiter
-
-📤 File & Media Uploads
-Image and media uploads handled via Multer
-
-Files stored securely in the cloud using Cloudinary
-
-🚀 API Access
-Clean and modular RESTful API for core features
-
-GraphQL support for optimized and flexible data access
-
-Pagination for improved performance on feeds and comments
-
-📬 Realtime Chat
-Socket.io enables real-time private messaging between users
-
-Includes typing indicators and instant delivery
-
-🧪 Setup & Run
-bash
-Copy
-Edit
+```bash
 # 1. Clone the repository
 git clone https://github.com/your-username/social-media-backend.git
 

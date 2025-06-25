@@ -1,15 +1,13 @@
 
 
-const encrypt = (text) => {
-    const encodedText =  CryptoJS.AES.encrypt(text, 'encrypt-message-secret-key').toString();
-    console.log(encodedText);
-    return encodedText;
+const encrypt = (text) => 
+        CryptoJS.AES.encrypt(text, 'encrypt-message-secret-key').toString();
     
-}
 
-const decrypt = (text) => {
-    return CryptoJS.AES.decrypt(text,'encrypt-message-secret-key').toString(CryptoJS.enc.Utf8);
-}
+const decrypt = (text) => 
+     CryptoJS.AES.decrypt(text,'encrypt-message-secret-key').toString(CryptoJS.enc.Utf8);
+    
+
 class Node {
     constructor(char, freq, left = null, right = null) {
       this.char = char;
@@ -19,68 +17,73 @@ class Node {
     }
   }
   
-  // بناء شجرة هوفمان
   function buildHuffmanTree(text) {
+
     const freqMap = new Map();
-  
-    // 1. حساب التكرار
     for (let char of text) {
       freqMap.set(char, (freqMap.get(char) || 0) + 1);
     }
   
-    // 2. تحويل التكرارات إلى نودات
+    console.log({freqMap : freqMap.get('l')});
+    
     let nodes = Array.from(freqMap, ([char, freq]) => new Node(char, freq));
-  
-    // 3. بناء الشجرة
+    let x = Array.from(freqMap, ([char, freq]) => new Node(char, freq));
+    console.log(x);
+    
+    
+  // desc asc
     while (nodes.length > 1) {
-      // ترتيب النودات حسب التكرار
       nodes.sort((a, b) => a.freq - b.freq);
   
-      // دمج أقل عنصرين
       const left = nodes.shift();
       const right = nodes.shift();
-  
+        // a b ab
       const merged = new Node(null, left.freq + right.freq, left, right);
       nodes.push(merged);
     }
-  
-    return nodes[0]; // root node
+    
+    return nodes[0]; 
   }
-  
-  // بناء كودات هوفمان
+
   function buildCodes(node, path = "", map = {}) {
+
     if (!node.left && !node.right) {
       map[node.char] = path;
+
     }
+    //recursion
+    // a 0
     if (node.left) buildCodes(node.left, path + "0", map);
     if (node.right) buildCodes(node.right, path + "1", map);
+    console.log({map});
+    
     return map;
   }
   
-  // encode huffman
 function huffmanEncode(text) {
     const tree = buildHuffmanTree(text);
+    
     const codes = buildCodes(tree);
+    console.log({codes});
+    
   
-    let encoded = "";
+    let encodedText = "";
     for (let char of text) {
-      encoded += codes[char];
+        encodedText += codes[char];
     }
   
-    return { encodedText: encoded, tree };
+    return { encodedText, tree };
   }
   
-  // دالة فك الضغط
   function huffmanDecode(encodedText, tree) {
     let result = "";
     let node = tree;
-  
     for (let bit of encodedText) {
       node = bit === "0" ? node.left : node.right;
-  
+    
       if (!node.left && !node.right) {
         result += node.char;
-        node = tree; // reset to root
+        node = tree; 
       }
     }
   

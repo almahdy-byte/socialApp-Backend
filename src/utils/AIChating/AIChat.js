@@ -25,7 +25,6 @@ export const AI = async(message , next) => {
     ${message}
     """
     `;
-    console.log(message);
     
 
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_AI_KEY);

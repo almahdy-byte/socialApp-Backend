@@ -37,6 +37,7 @@ export const sendMessage =async(socket)=>{
         new:true
 });
 
+
     socket.to(friend._id.toString()).emit('private_message' , {
             senderId:{
                 _id:user._id,

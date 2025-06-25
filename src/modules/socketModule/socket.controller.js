@@ -8,13 +8,14 @@ export const serverConnection = (server)=>{
     })
     io.use(async(socket, next) => {
         const authorization = socket.handshake.auth.token;
-        const  user =await decodeToken({authorization , next});
+        const user =await decodeToken({authorization , next});
         if (!user) return next(new Error("Authentication error"));
         socket.userName = user.user;
         socket.id = user.id;
         socket.user = user;
         next();
 });
+//
     io.on("connection", (socket)=>{ 
         console.log("New client connected");
         sendMessage(socket);

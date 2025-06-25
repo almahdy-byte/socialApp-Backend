@@ -71,24 +71,27 @@ export const softDelete = async(req , res ,next)=>{
 }
 
 export const getPost = async(req , res , next)=>{
+
+    const user = req.user;
     const filter = {
-        isDeleted:false
+        isDeleted:false,
+        userId:user._id
     };
     if(req.params.postId) {
         filter._id = req.params.postId
     }
     const {page , limit} = req.query;
     const posts = await postModel.paginate(
-        {},{
+        {...filter},{
             limit,
             page ,
             populate:[{
                 path:'likes',
-                select:'userName email -_id'
+                select:'userName email -_id '
             },
             {
                 path:'userId',
-                select:'userName email -_id'
+                select:'userName email -_id '
             }
              , {
                 path:"comments"

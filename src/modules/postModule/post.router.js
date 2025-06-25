@@ -26,7 +26,9 @@ router.delete('/soft-delete/:postId' ,
     auth(),
     asyncErrorHandler(postServices.softDelete)
 )
-router.get('/get-all-post' , asyncErrorHandler(postServices.getPost))
+router.get('/get-all-post' , 
+    auth(),
+    asyncErrorHandler(postServices.getPost))
 router.get('/get-post/:postId' , asyncErrorHandler(postServices.getPost))
 router.patch('/like-unlike/:postId' , auth(),asyncErrorHandler(postServices.like_unlike))
 

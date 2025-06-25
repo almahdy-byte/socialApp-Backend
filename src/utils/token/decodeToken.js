@@ -9,7 +9,8 @@ export const tokenTypes = {
 Object.freeze(tokenTypes);
 
 export const decodeToken = async ({ authorization, type = tokenTypes.access, next }) => {
-    if (!authorization) return next(new Error('please send token'));
+    if (!authorization)
+        return next(new Error('please send token'));
 
     const parts = authorization.split(" ");
     if (parts.length !== 2) return next(new Error('Invalid token format'));
@@ -17,6 +18,8 @@ export const decodeToken = async ({ authorization, type = tokenTypes.access, nex
     
     const [barer, token] = parts;
     if (!barer || !token) return next(new Error('please send token'));
+    
+
     
     let accessSignature, refreshSignature;
     
@@ -39,7 +42,6 @@ export const decodeToken = async ({ authorization, type = tokenTypes.access, nex
 
     try {
         const decoded = await verify(token, sign);
-        
         const user = await userModel.findOne({_id : decoded.id, isConfirmed: true});
         
         if (!user) return next(new Error('Invalid token'));

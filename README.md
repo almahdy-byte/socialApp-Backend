@@ -1,85 +1,90 @@
-📱 Social Media App – Backend (Node.js & Express)
-This is the backend of a Social Media Platform that allows users to connect, share posts, chat in real-time, and manage their profiles. Built using a modern tech stack with REST & GraphQL APIs, media handling, and authentication features.
+#📱 Social Media App – Backend (Node.js & Express)
+This is the backend service for a Social Media Application that enables users to connect, share content, and interact in real-time. It includes secure authentication, media uploads, GraphQL queries, and chat features — all powered by modern web technologies.
+
 
 🛠️ Technologies Used
-Node.js & Express.js
+Node.js
 
-MongoDB & Mongoose
+Express.js
 
-GraphQL – Flexible API querying
+MongoDB + Mongoose
 
-Socket.io – Real-time messaging
+GraphQL
 
-Cloudinary & Multer – Media uploads (images/videos)
+Socket.io
 
-Bcrypt & Crypto – Secure password handling
+Cloudinary + Multer (Image/File Uploads)
 
-JWT – Token-based user authentication
+Bcrypt & Crypto (Password Security)
 
-Google OAuth – Social login integration
+Nodemailer (Email Handling)
 
-Nodemailer – Email verification/reset
+JWT (Authentication)
 
-Pagination – Optimized data loading
+Google OAuth (Social Login)
 
-Helmet, CORS, Rate Limiter – API security
+Pagination
+
+Helmet, CORS, Rate Limiter (Security Enhancements)
 
 🌟 Features
-👤 Users
-Register, login (email/password or Google)
+🔐 Google OAuth Integration
+Seamless third-party login using Google accounts.
 
-Edit profiles, profile pictures, and bio
-
-Follow/unfollow other users
-
-📝 Posts
-Create, edit, delete posts
-
-Upload images or videos
-
-Like and comment on posts
-
-💬 Real-Time Messaging
-Private 1-to-1 chat between users
-
-Typing indicators and read receipts (via Socket.io)
-
-🔐 Authentication & Security
-Passwords hashed with Bcrypt
-
-JWT-based login & session handling
-
-OAuth login with Google
-
-API protected with Helmet, CORS, and Rate Limiting
+💬 Real-Time Chat
+Real-time messaging between users powered by Socket.io.
 
 🖼️ Media Uploads
-Handled with Multer
+Images and files are uploaded using Multer and stored securely in the cloud via Cloudinary.
 
-Uploaded securely to Cloudinary
+🔍 GraphQL API
+Flexible and efficient data fetching with GraphQL schema and resolvers.
 
-🚀 APIs
-REST endpoints for main functionalities
+📄 Pagination Support
+Improved performance and user experience with server-side pagination.
 
-GraphQL API for optimized data fetching
-
-Pagination support in feed and messages
+✅ Clean REST API
+Structured REST endpoints with robust input validation and consistent error handling.
 
 🧪 Setup & Run
 bash
 Copy
 Edit
 # 1. Clone the repository
-git clone https://github.com/your-username/social-media-backend.git
+git clone https://github.com/almahdy-byte/socialApp-Backend.git
 
-# 2. Move into the project folder
-cd social-media-backend
+# 2. Move into the project directory
+cd socialApp-Backend
 
-# 3. Install all dependencies
+# 3. Install dependencies
 npm install
 
-# 4. Configure environment variables
-# Create a .env file based on .env.example
+# 4. Create a .env file based on .env.example
 
-# 5. Run the development server
+# 5. Start the development server
 npm run dev
+🚀 API Access
+RESTful API for standard CRUD operations
+
+GraphQL endpoint for optimized querying
+
+Supports pagination for scalable feeds
+
+📬 Real-Time Messaging
+Implemented using Socket.io
+
+Enables direct, real-time conversations between users
+
+🔐 Security
+Passwords are hashed with Bcrypt
+
+JWT for authentication and protected routes
+
+Helmet, CORS, and Rate Limiter for secure API access
+
+Crypto used for token generation and reset mechanisms
+
+🧑‍💻 Author
+Developed by Mohamed Almahdy
+For personal portfolio, experiments, and backend practice.
+

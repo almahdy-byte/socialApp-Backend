@@ -1,6 +1,5 @@
-#📱 Social Media App – Backend (Node.js & Express)
-This is the backend service for a Social Media Application that enables users to connect, share content, and interact in real-time. It includes secure authentication, media uploads, GraphQL queries, and chat features — all powered by modern web technologies.
-
+📱 Social Media App - Backend (Node.js & Express)
+This is the backend service for a Social Media Application that enables users to register, connect, share media, and chat in real-time. The app uses RESTful and GraphQL APIs, supports media uploads, and ensures secure authentication and communication.
 
 🛠️ Technologies Used
 Node.js
@@ -13,11 +12,11 @@ GraphQL
 
 Socket.io
 
-Cloudinary + Multer (Image/File Uploads)
+Cloudinary + Multer (File Uploads)
 
 Bcrypt & Crypto (Password Security)
 
-Nodemailer (Email Handling)
+Nodemailer (Emailing)
 
 JWT (Authentication)
 
@@ -28,63 +27,65 @@ Pagination
 Helmet, CORS, Rate Limiter (Security Enhancements)
 
 🌟 Features
-🔐 Google OAuth Integration
-Seamless third-party login using Google accounts.
+👤 Users
+Register and login with email/password or Google
 
-💬 Real-Time Chat
-Real-time messaging between users powered by Socket.io.
+View and edit their profile and media
 
-🖼️ Media Uploads
-Images and files are uploaded using Multer and stored securely in the cloud via Cloudinary.
+Follow/unfollow other users
 
-🔍 GraphQL API
-Flexible and efficient data fetching with GraphQL schema and resolvers.
+View posts and interact with others
 
-📄 Pagination Support
-Improved performance and user experience with server-side pagination.
+📝 Posts & Media
+Create, edit, and delete posts
 
-✅ Clean REST API
-Structured REST endpoints with robust input validation and consistent error handling.
+Upload images and media using Multer & Cloudinary
+
+Like and comment on posts
+
+💬 Messaging
+Real-time 1:1 chat system using Socket.io
+
+Instant messaging with typing indicators and notifications
+
+🔐 Security & Authentication
+Passwords are securely hashed using Bcrypt
+
+JWT for token-based session handling
+
+Google OAuth for seamless third-party login
+
+API protected using Helmet, CORS, and Rate Limiter
+
+📤 File & Media Uploads
+Image and media uploads handled via Multer
+
+Files stored securely in the cloud using Cloudinary
+
+🚀 API Access
+Clean and modular RESTful API for core features
+
+GraphQL support for optimized and flexible data access
+
+Pagination for improved performance on feeds and comments
+
+📬 Realtime Chat
+Socket.io enables real-time private messaging between users
+
+Includes typing indicators and instant delivery
 
 🧪 Setup & Run
 bash
 Copy
 Edit
 # 1. Clone the repository
-git clone https://github.com/almahdy-byte/socialApp-Backend.git
+git clone https://github.com/your-username/social-media-backend.git
 
-# 2. Move into the project directory
-cd socialApp-Backend
-
-# 3. Install dependencies
+# 2. Install dependencies
+cd social-media-backend
 npm install
 
-# 4. Create a .env file based on .env.example
+# 3. Create a .env file based on .env.example
 
-# 5. Start the development server
+# 4. Start the development server
 npm run dev
-🚀 API Access
-RESTful API for standard CRUD operations
-
-GraphQL endpoint for optimized querying
-
-Supports pagination for scalable feeds
-
-📬 Real-Time Messaging
-Implemented using Socket.io
-
-Enables direct, real-time conversations between users
-
-🔐 Security
-Passwords are hashed with Bcrypt
-
-JWT for authentication and protected routes
-
-Helmet, CORS, and Rate Limiter for secure API access
-
-Crypto used for token generation and reset mechanisms
-
-🧑‍💻 Author
-Developed by Mohamed Almahdy
-For personal portfolio, experiments, and backend practice.
-
